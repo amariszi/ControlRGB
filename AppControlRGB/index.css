@@ -1,5 +1,9 @@
 .slider{
-	margin:10px;
+    display: block;
+    margin-top: 40px !important;
+    margin-left: 5% !important;
+    margin-right: 5% !important;
+    width: 90% !important;
 }
 html, body{
 	background-color:black;
@@ -62,13 +66,11 @@ html, body{
 input[type=range] {
   -webkit-appearance: none;
   margin: 18px 0;
-  width: 100%;
 }
 input[type=range]:focus {
   outline: none;
 }
 input[type=range]::-webkit-slider-runnable-track {
-  width: 100%;
   height: 8.4px;
   cursor: pointer;
   animate: 0.2s;
@@ -80,7 +82,7 @@ input[type=range]::-webkit-slider-thumb {
   box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
   border: 1px solid #000000;
   height: 36px;
-  width: 16px;
+  width: 26px;
   border-radius: 3px;
   background: #ffffff;
   cursor: pointer;
@@ -91,7 +93,6 @@ input[type=range]:focus::-webkit-slider-runnable-track {
   background: #367ebd;
 }
 input[type=range]::-moz-range-track {
-  width: 100%;
   height: 8.4px;
   cursor: pointer;
   animate: 0.2s;
@@ -104,7 +105,7 @@ input[type=range]::-moz-range-thumb {
   box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
   border: 1px solid #000000;
   height: 36px;
-  width: 16px;
+  width: 26px;
   border-radius: 3px;
   background: #ffffff;
   cursor: pointer;
