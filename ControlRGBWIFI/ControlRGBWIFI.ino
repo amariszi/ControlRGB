@@ -19,7 +19,10 @@ int rojo = 0;
 int verde = 0;
 int azul = 0;
 
-int pinRojo = 13;
+int pinRojo = 14;
+int pinVerde = 12;
+int pinAzul = 13;
+
 int estadoPinRojo = 0;
 
 void webSocketEvent(uint8_t num, WStype_t type, uint8_t * payload, size_t lenght) {
@@ -34,16 +37,41 @@ void webSocketEvent(uint8_t num, WStype_t type, uint8_t * payload, size_t lenght
             }
             break;
         case WStype_TEXT:
+            numeroRecibido="";
+            char inbyte;
+            inbyte=payload[0];
+            Serial.println("recibo:");
+            Serial.println(inbyte);
             for(int i=1; i<lenght; i++){
-                numeroRecibido += payload[i];
+                inbyte=payload[i];
+                numeroRecibido += inbyte;
+                Serial.println(inbyte);
             } 
+            Serial.println(numeroRecibido);
+            inbyte=payload[0];
+            if(inbyte=='R') {
+              rojo = numeroRecibido.toInt();
+              analogWrite(pinRojo, map(rojo, 0, 255, 0, 1023));  
+              webSocket.broadcastTXT("R"+ String(rojo));
+            }
+            if(inbyte=='G'){
+              verde = numeroRecibido.toInt();
+              analogWrite(pinVerde, map(verde, 0, 255, 0, 1023)); 
+              webSocket.broadcastTXT("G"+ String(verde)); 
+            }
+            if(inbyte=='B'){
+              azul = numeroRecibido.toInt();
+              analogWrite(pinAzul, map(azul, 0, 255, 0, 1023));  
+              webSocket.broadcastTXT("B"+ String(azul));
+            }
 
-            if(payload[0]=='R') rojo = numeroRecibido.toInt();
-            if(payload[0]=='G') verde = numeroRecibido.toInt();
-            if(payload[0]=='B') azul = numeroRecibido.toInt();
-
-            //Serial.println("R" + rojo + "G" + verde + "V" + azul);
-            Serial.printf("R%d G%d B%d\n", rojo, verde, azul);
+            Serial.print("R");
+            Serial.print(rojo);
+            Serial.print("G");
+            Serial.print(verde);
+            Serial.print("B");
+            Serial.print(azul);
+            
             break;
         case WStype_BIN:
             Serial.printf("[%u] get binary lenght: %u\n", num, lenght);
@@ -86,13 +114,13 @@ void setup(){
   Serial.println("AP IP address: ");
   Serial.println(myIP);
   // Start the server
-   server.on("/index.html",handleIndex_html);
-   server.on("/index.css",handleIndex_css);
-   server.on("/index.js",handleIndex_js);
+  server.on("/index.html",handleIndex_html);
+  server.on("/index.css",handleIndex_css);
+  server.on("/index.js",handleIndex_js);
    
-   server.onNotFound ( handleNotFound );
+  server.onNotFound ( handleNotFound );
 
-   if (MDNS.begin("CamaraMultiplano")) {
+  if (MDNS.begin("CamaraMultiplano")) {
     Serial.println("MDNS responder started");
   }
   server.begin();
@@ -102,8 +130,8 @@ void setup(){
   Serial.println ( "WSockets server started" );
 
   pinMode(pinRojo, OUTPUT);
-  digitalWrite(pinRojo, 1);
-  estadoPinRojo = 1;
+  pinMode(pinVerde, OUTPUT);
+  pinMode(pinAzul, OUTPUT);
 }
 //----------------------------------------------------------------------- 
 void loop(){
@@ -113,7 +141,5 @@ void loop(){
   if((millis()-ms_ultima_medicion_memoria)>5000){
     Serial.println(ESP.getFreeHeap());
     ms_ultima_medicion_memoria = millis();
-    estadoPinRojo = 1 - estadoPinRojo;
-    digitalWrite(pinRojo, estadoPinRojo);
   }
 }

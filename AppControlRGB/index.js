@@ -46,7 +46,10 @@ return {
 	b: Math.round(b * 255)
 };
 }
-
+var red_slider = document.getElementById("red_slider");    
+var green_slider = document.getElementById("green_slider");    
+var blue_slider = document.getElementById("blue_slider");  
+var muestra_color = document.getElementById("muestra_color"); 
 
 document.addEventListener("DOMContentLoaded", function(event) { 
 var sock; 
@@ -64,17 +67,27 @@ var conectar = function(){
 		console.log('socket conectado');
 	};
 	sock.onmessage = function(m){
-		var mensaje = JSON.parse(m.data);			
-		console.log("conector recibe mensaje por socket:", mensaje);            
+		console.log("conector recibe mensaje por socket:", m.data);
+		var valor = m.data.substring(1, m.data.length);	
+		if(m.data.substring(0,1) == "R") {
+			red_slider.value = valor;
+			ultimo_red = valor;
+		}
+		if(m.data.substring(0,1) == "G") {
+			green_slider.value = valor;
+			ultimo_green = valor;
+		}
+		if(m.data.substring(0,1) == "B") {
+			blue_slider.value = valor;
+			ultimo_blue = valor;
+		}
+		mostrarColor();		            
 	}                    
 };
 
 conectar();
 
-var red_slider = document.getElementById("red_slider");    
-var green_slider = document.getElementById("green_slider");    
-var blue_slider = document.getElementById("blue_slider");  
-var muestra_color = document.getElementById("muestra_color");  
+ 
 
 var ultimo_red = -1;
 var ultimo_green = -1;
@@ -115,5 +128,4 @@ setInterval(function(){
 	}
 }, 200);                    
 });
-
         
