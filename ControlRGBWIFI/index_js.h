@@ -1,5 +1,5 @@
 const char PAGE_index_js[] PROGMEM = R"=====(
-var RGBtoHSV = function (r, g, b) {
+	var RGBtoHSV = function (r, g, b) {
 if (arguments.length === 1) {
 	g = r.g, b = r.b, r = r.r;
 }
@@ -47,88 +47,143 @@ return {
 	b: Math.round(b * 255)
 };
 }
-var red_slider = document.getElementById("red_slider");    
-var green_slider = document.getElementById("green_slider");    
-var blue_slider = document.getElementById("blue_slider");  
-var muestra_color = document.getElementById("muestra_color"); 
-
-document.addEventListener("DOMContentLoaded", function(event) { 
-var sock; 
-
-var conectar = function(){
-	sock = new WebSocket("ws://192.168.4.1:1234", ['mensaje_vortex']);     
-	sock.onerror = function(err){
-		console.log('socket tiró error' + err);
-	};
-	sock.onclose = function(){
-		console.log('socket desconectado');
-		conectar();
-	};
-	sock.onopen = function(){ 
-		console.log('socket conectado');
-	};
-	sock.onmessage = function(m){
-		console.log("conector recibe mensaje por socket:", m.data);
-		var valor = m.data.substring(1, m.data.length);	
-		if(m.data.substring(0,1) == "R") {
-			red_slider.value = valor;
-			ultimo_red = valor;
-		}
-		if(m.data.substring(0,1) == "G") {
-			green_slider.value = valor;
-			ultimo_green = valor;
-		}
-		if(m.data.substring(0,1) == "B") {
-			blue_slider.value = valor;
-			ultimo_blue = valor;
-		}
-		mostrarColor();		            
-	}                    
-};
-
-conectar();
-
- 
 
 var ultimo_red = -1;
 var ultimo_green = -1;
 var ultimo_blue = -1;
 
+var ultima_corr_red = 0;
+var ultima_corr_green = 0;
+var ultima_corr_blue = 0;
+
+var sock;
+
 var mostrarColor = function(canal){
-	var hsv = RGBtoHSV(ultimo_red, ultimo_green, ultimo_blue);
-	hsv.h = 0.5 + hsv.h;
-	hsv.s = 0.5 + hsv.h;
-	hsv.v = 0.5 + hsv.h;
-	var rgb = HSVtoRGB(hsv);   
-	muestra_color.style="background-color:rgb(" + ultimo_red + "," + ultimo_green + "," + ultimo_blue + ");" + 
-			" color:rgb(" + rgb.r + "," + rgb.g + "," + rgb.b + ");";
+//	var hsv = RGBtoHSV(ultimo_red, ultimo_green, ultimo_blue);
+//	hsv.h = 0.5 + hsv.h;
+//	hsv.s = 0.5 + hsv.h;
+//	hsv.v = 0.5 + hsv.h;
+//	var rgb = HSVtoRGB(hsv);   
+//	muestra_color.style="background-color:rgb(" + ultimo_red + "," + ultimo_green + "," + ultimo_blue + ");" + 
+//			" color:rgb(" + rgb.r + "," + rgb.g + "," + rgb.b + ");";
 	muestra_color.innerHTML = "R" + ultimo_red + " G" + ultimo_green + " B" + ultimo_blue;                
 };
 
-setInterval(function(){
-	if(red_slider.value != ultimo_red){
-		ultimo_red = parseInt(red_slider.value);
-		console.log("red:" + ultimo_red);
-		mostrarColor();
-		//var mensaje = {color:"R", valor:ultimo_red};
-		if(sock.readyState == 1) sock.send("R"+ultimo_red);
-	}
-	if(green_slider.value != ultimo_green){
-		ultimo_green = parseInt(green_slider.value);
-		console.log("green:" + ultimo_green);
-		mostrarColor();
-		//var mensaje = {color:"G", valor:ultimo_green};
-		if(sock.readyState == 1) sock.send("G"+ultimo_green);
-	}
-	if(blue_slider.value != ultimo_blue){
-		ultimo_blue = parseInt(blue_slider.value);
-		console.log("blue:" + ultimo_blue);
-		mostrarColor();
-		//var mensaje = {color:"V", valor:ultimo_blue};
-		if(sock.readyState == 1) sock.send("B"+ultimo_blue);
-	}
-}, 200);                    
+
+document.addEventListener("DOMContentLoaded", function(event) { 
+	
+	var red_slider = document.getElementById("red_slider");    
+	var green_slider = document.getElementById("green_slider");    
+	var blue_slider = document.getElementById("blue_slider");  
+	var txt_correccion_rojo = document.getElementById("txt_correccion_rojo");    
+	var txt_correccion_verde = document.getElementById("txt_correccion_verde");    
+	var txt_correccion_azul = document.getElementById("txt_correccion_azul");    
+	
+	var muestra_color = document.getElementById("muestra_color"); 
+
+ 
+
+	var conectar = function(){
+		sock = new WebSocket("ws://192.168.4.1:1234", ['mensaje_vortex']);     
+		sock.onerror = function(err){
+			console.log('socket tirÃƒÂ³ error' + err);
+		};
+		sock.onclose = function(){
+			console.log('socket desconectado');
+			conectar();
+		};
+		sock.onopen = function(){ 
+			console.log('socket conectado');
+		};
+		sock.onmessage = function(m){
+			console.log("conector recibe mensaje por socket:", m.data);
+			var valor = m.data.substring(1, m.data.length);	
+			if(m.data.substring(0,1) == "R") {
+				red_slider.value = valor;
+				ultimo_red = valor;
+			}
+			if(m.data.substring(0,1) == "G") {
+				green_slider.value = valor;
+				ultimo_green = valor;
+			}
+			if(m.data.substring(0,1) == "B") {
+				blue_slider.value = valor;
+				ultimo_blue = valor;
+			}
+			if(m.data.substring(0,1) == "r") {
+				txt_correccion_rojo.value = valor;
+				ultima_corr_red = valor;
+			}
+			if(m.data.substring(0,1) == "g") {
+				txt_correccion_verde.value = valor;
+				ultima_corr_green = valor;
+			}
+			if(m.data.substring(0,1) == "b") {
+				txt_correccion_azul.value = valor;
+				ultima_corr_blue = valor;
+			}
+			mostrarColor();		            
+		}                    
+	};
+
+	conectar();
+
+
+	
+	setInterval(function(){
+		if(red_slider.value != ultimo_red){
+			ultimo_red = parseInt(red_slider.value);
+			console.log("red:" + ultimo_red);
+			mostrarColor();
+			//var mensaje = {color:"R", valor:ultimo_red};
+			if(sock.readyState == 1) sock.send("R"+ultimo_red);
+		}
+		if(green_slider.value != ultimo_green){
+			ultimo_green = parseInt(green_slider.value);
+			console.log("green:" + ultimo_green);
+			mostrarColor();
+			//var mensaje = {color:"G", valor:ultimo_green};
+			if(sock.readyState == 1) sock.send("G"+ultimo_green);
+		}
+		if(blue_slider.value != ultimo_blue){
+			ultimo_blue = parseInt(blue_slider.value);
+			console.log("blue:" + ultimo_blue);
+			mostrarColor();
+			//var mensaje = {color:"V", valor:ultimo_blue};
+			if(sock.readyState == 1) sock.send("B"+ultimo_blue);
+		}
+		
+		
+		if(txt_correccion_rojo.value != ultima_corr_red){
+			ultima_corr_red = parseInt(txt_correccion_rojo.value);
+			console.log("corr red:" + ultima_corr_red);
+			if(sock.readyState == 1) sock.send("r"+ultima_corr_red);
+		}
+		if(txt_correccion_verde.value != ultima_corr_green){
+			ultima_corr_green = parseInt(txt_correccion_verde.value);
+			console.log("corr green:" + ultima_corr_green);
+			if(sock.readyState == 1) sock.send("g"+ultima_corr_green);
+		}
+		if(txt_correccion_azul.value != ultima_corr_blue){
+			ultima_corr_blue = parseInt(txt_correccion_azul.value);
+			console.log("corr blue:" + ultima_corr_blue);
+			if(sock.readyState == 1) sock.send("b"+ultima_corr_blue);
+		}
+	}, 100);                    
+
 });
 
 
+        
+
+        
+  
+
 )=====";
+
+
+
+
+
+
+

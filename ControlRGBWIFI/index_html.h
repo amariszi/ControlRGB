@@ -1,6 +1,7 @@
 const char PAGE_index_html[] PROGMEM = R"=====(
- <!DOCTYPE html>
-  <html>
+	
+	
+<html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">    
         <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -17,14 +18,29 @@ const char PAGE_index_html[] PROGMEM = R"=====(
                 AMARI SZI
             </div>
         </div>
-    <input class="slider" id="red_slider" type="range" min="0" max="255" step="1" />    
-    <input class="slider" id="green_slider" type="range" min="0" max="255" step="1" />    
-    <input class="slider" id="blue_slider" type="range" min="0" max="255" step="1" />   
-        <div id="muestra_color">
+		<input class="slider" id="red_slider" type="range" min="0" max="255" step="1" />		
+		<input class="slider" id="green_slider" type="range" min="0" max="255" step="1" />		
+		<input class="slider" id="blue_slider" type="range" min="0" max="255" step="1" />	
+		
+		<div id="panel_correciones">
+			<div id="lbl_ajustes">Ajustes:</div>
+			<input type=number id="txt_correccion_rojo" value="0"/>
+			<input type=number id="txt_correccion_verde" value="0"/>
+			<input type=number id="txt_correccion_azul" value="0"/>
+		</div>
+        
+		<div id="muestra_color">
             
         </div>
     </body>    
-  <script type="text/javascript" src="index.js"></script>     
+	<script type="text/javascript" src="index.js"></script>     
 </html>
 
 )=====";
+
+
+
+
+
+
+

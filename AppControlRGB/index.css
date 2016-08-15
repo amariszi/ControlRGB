@@ -1,6 +1,6 @@
 .slider{
     display: block;
-    margin-top: 40px !important;
+    margin-top: 50px !important;
     margin-left: 5% !important;
     margin-right: 5% !important;
     width: 90% !important;
@@ -37,11 +37,31 @@ html, body{
 	left: 10px;
 	bottom: 10px;
 	right: 10px;
-	height: 74px;
+	height: 15%;
 	border-radius: 5px 5px 5px 5px;
 	text-align: center;
 	font-size: 250%;
-	padding-top: 20px;
+	padding-top: 1%;
+	box-sizing: border-box;
+	color: black;
+	background-color: white;
+}
+
+#txt_correccion_rojo{
+	border: 2px red solid;
+	width: 70px;
+}
+#txt_correccion_verde{
+	border: 2px green solid;
+	width: 70px;
+}
+#txt_correccion_azul{
+	border: 2px blue solid;
+	width: 70px;
+}
+#lbl_ajustes{
+	display: inline-block;
+	color: yellow;
 }
 #red_slider::-webkit-slider-runnable-track{
 	background: red;
@@ -63,6 +83,10 @@ html, body{
 	background: blue;
 }
 
+#panel_correciones{
+	margin-top: 39px;
+    margin-left: 5%;
+}
 input[type=range] {
   -webkit-appearance: none;
   margin: 18px 0;
@@ -82,7 +106,7 @@ input[type=range]::-webkit-slider-thumb {
   box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
   border: 1px solid #000000;
   height: 36px;
-  width: 26px;
+  width: 32px;
   border-radius: 3px;
   background: #ffffff;
   cursor: pointer;
@@ -105,7 +129,7 @@ input[type=range]::-moz-range-thumb {
   box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
   border: 1px solid #000000;
   height: 36px;
-  width: 26px;
+  width: 32px;
   border-radius: 3px;
   background: #ffffff;
   cursor: pointer;
